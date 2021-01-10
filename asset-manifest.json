@@ -1,23 +1,23 @@
 {
   "files": {
-    "main.css": "/missing_mahjong/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/missing_mahjong/static/js/main.e4cbdc91.chunk.js",
-    "main.js.map": "/missing_mahjong/static/js/main.e4cbdc91.chunk.js.map",
-    "runtime-main.js": "/missing_mahjong/static/js/runtime-main.e44533bb.js",
-    "runtime-main.js.map": "/missing_mahjong/static/js/runtime-main.e44533bb.js.map",
-    "static/js/2.53b2c43a.chunk.js": "/missing_mahjong/static/js/2.53b2c43a.chunk.js",
-    "static/js/2.53b2c43a.chunk.js.map": "/missing_mahjong/static/js/2.53b2c43a.chunk.js.map",
-    "static/js/3.188a4e29.chunk.js": "/missing_mahjong/static/js/3.188a4e29.chunk.js",
-    "static/js/3.188a4e29.chunk.js.map": "/missing_mahjong/static/js/3.188a4e29.chunk.js.map",
+    "main.css": "/missing_mahjong/static/css/main.598e9ba7.chunk.css",
+    "main.js": "/missing_mahjong/static/js/main.fc34c1db.chunk.js",
+    "main.js.map": "/missing_mahjong/static/js/main.fc34c1db.chunk.js.map",
+    "runtime-main.js": "/missing_mahjong/static/js/runtime-main.e618e2c3.js",
+    "runtime-main.js.map": "/missing_mahjong/static/js/runtime-main.e618e2c3.js.map",
+    "static/js/2.e2e47f75.chunk.js": "/missing_mahjong/static/js/2.e2e47f75.chunk.js",
+    "static/js/2.e2e47f75.chunk.js.map": "/missing_mahjong/static/js/2.e2e47f75.chunk.js.map",
+    "static/js/3.7fe55d15.chunk.js": "/missing_mahjong/static/js/3.7fe55d15.chunk.js",
+    "static/js/3.7fe55d15.chunk.js.map": "/missing_mahjong/static/js/3.7fe55d15.chunk.js.map",
     "index.html": "/missing_mahjong/index.html",
-    "static/css/main.8c8b27cf.chunk.css.map": "/missing_mahjong/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.53b2c43a.chunk.js.LICENSE.txt": "/missing_mahjong/static/js/2.53b2c43a.chunk.js.LICENSE.txt",
+    "static/css/main.598e9ba7.chunk.css.map": "/missing_mahjong/static/css/main.598e9ba7.chunk.css.map",
+    "static/js/2.e2e47f75.chunk.js.LICENSE.txt": "/missing_mahjong/static/js/2.e2e47f75.chunk.js.LICENSE.txt",
     "static/media/logo.6ce24c58.svg": "/missing_mahjong/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.e44533bb.js",
-    "static/js/2.53b2c43a.chunk.js",
-    "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.e4cbdc91.chunk.js"
+    "static/js/runtime-main.e618e2c3.js",
+    "static/js/2.e2e47f75.chunk.js",
+    "static/css/main.598e9ba7.chunk.css",
+    "static/js/main.fc34c1db.chunk.js"
   ]
 }
