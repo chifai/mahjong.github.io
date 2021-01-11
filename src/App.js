@@ -10,45 +10,29 @@ class App extends React.Component {
     super(props);
     this.state = {
       mjInHand: [],
+      possibleGroup: [],
     }
     this.objMissingMjCal = new MissingMjCal();
-
-    this.NumConst = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-    this.NumInHand = Array(16).fill(0);
-
     for (let index = 0; index < 16; index++) {
       this.state.mjInHand.push(this.renderMj(index, false))
     }
+
+    this.possibleGroup = [];
   }
 
   clickToAdd(i) {
     if (this.objMissingMjCal.changeMjNum(i, true) === true) {
-      //this.setState({mjInHand: this.renderMjInHand()})
+      this.possibleGroup = this.objMissingMjCal.calMissingMahjong().slice();
+      this.forceUpdate();
     }
-    this.forceUpdate();
+    
   }
 
   clickToDelete(i) {
     if (this.objMissingMjCal.changeMjNum(i, false) === true) {
-      //this.setState({mjInHand: this.renderMjInHand()})
+      this.possibleGroup = this.objMissingMjCal.calMissingMahjong().slice();
+      this.forceUpdate();
     }
-    this.forceUpdate();
-  }
-
-  renderMjInHand() {
-    /*
-    const mjList = []
-      console.log("len")
-      console.log(this.objMissingMjCal.MjInHand.length)
-      this.objMissingMjCal.MjInHand.forEach(el => {
-        console.log("yo")
-        mjList.push(this.renderButton(el, false));
-      });
-      return mjList
-      */
-     this.forceUpdate();
-     return;
   }
 
   renderMj(index, bAdd) {
@@ -60,30 +44,50 @@ class App extends React.Component {
     }
   }
 
-  mjGetState(i) {
-    return {
-      value: i,
-    };
+  renderAnswer() {
+    let rdAns = [];
+    let num = this.possibleGroup.length;
+    if(num === 0) {
+      return; 
+    }
+
+    this.possibleGroup.forEach(el => {
+      const mj_ans = [];
+      let bRed = false;
+      el.group.forEach(MjNum => {
+        if (MjNum === el.num && bRed === false) {
+          mj_ans.push(<button className="button_red">{MjNum}</button>);
+          bRed = true;
+        }
+        else {
+          mj_ans.push(<button className="button">{MjNum}</button>);
+        }
+      })
+      rdAns.push(<div>{mj_ans}</div>);
+      rdAns.push(<br></br>);
+    });
+
+    <button className="button"></button>
+
+    return rdAns;
   }
 
   render() {
     // create mahjong buttons with 1-9
-    console.log("render")
-    const btn_mj9 = []
-    const btn_myMj = []
+    const btn_mj9 = [];
+    const btn_myMj = [];
     for (let index = 0; index < 9; index++) {
       btn_mj9.push(this.renderMj(index + 1, true))
     }
 
-    
-    console.log(this.objMissingMjCal.MjInHand)
-    const btn_copy = this.state.mjInHand.slice();
     this.objMissingMjCal.MjInHand.forEach(el => {
-      btn_myMj.push(btn_copy[el]);
+      btn_myMj.push(this.state.mjInHand[el]);
     });
 
-    console.log(btn_copy)
+    const mj_ans = this.renderAnswer();
 
+
+    const rdAns = this.renderAnswer();
     return (
       <div className="App">
         <header className="App-header">
@@ -97,7 +101,8 @@ class App extends React.Component {
           <div>{btn_mj9}</div>
           <h3>你的手牌</h3>
           <div>{btn_myMj}</div>
-          <h4>End</h4>
+          <h3>你的聽牌組合</h3>
+          {rdAns}
         </body>
 
         <footer className="App-footer">
