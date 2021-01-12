@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import NumButton from './components/NumButton';
 import * as LayoutDef from './components/const';
 import MissingMjCal from './components/MissingMjCal';
 
@@ -8,15 +7,7 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      mjInHand: [],
-      possibleGroup: [],
-    }
     this.objMissingMjCal = new MissingMjCal();
-    for (let index = 0; index < 16; index++) {
-      this.state.mjInHand.push(this.renderMj(index, false))
-    }
-
     this.possibleGroup = [];
   }
 
@@ -25,7 +16,7 @@ class App extends React.Component {
       this.possibleGroup = this.objMissingMjCal.calMissingMahjong().slice();
       this.forceUpdate();
     }
-    
+
   }
 
   clickToDelete(i) {
@@ -35,20 +26,28 @@ class App extends React.Component {
     }
   }
 
-  renderMj(index, bAdd) {
+  renderMjButton(index, bAdd) {
     if (bAdd === true) {
-      return <NumButton value={index} onClick={() => this.clickToAdd(index)} />;
+      return <button
+        className="button"
+        onClick={() => this.clickToAdd(index)}>
+        {index}
+      </button>;
     }
     else {
-      return <NumButton value={index} onClick={() => this.clickToDelete(index)} />;
+      return <button
+        className="button"
+        onClick={() => this.clickToDelete(index)}>
+        {index}
+      </button>;
     }
   }
 
   renderAnswer() {
     let rdAns = [];
     let num = this.possibleGroup.length;
-    if(num === 0) {
-      return; 
+    if (num === 0) {
+      return;
     }
 
     this.possibleGroup.forEach(el => {
@@ -67,27 +66,24 @@ class App extends React.Component {
       rdAns.push(<br></br>);
     });
 
-    <button className="button"></button>
-
     return rdAns;
   }
 
   render() {
-    // create mahjong buttons with 1-9
     const btn_mj9 = [];
     const btn_myMj = [];
-    for (let index = 0; index < 9; index++) {
-      btn_mj9.push(this.renderMj(index + 1, true))
-    }
+    const rdAns = this.renderAnswer();
 
+    // create mahjong buttons, click to add
+    for (let index = 0; index < 9; index++) {
+      btn_mj9.push(this.renderMjButton(index + 1, true))
+    }
+    
+    // create mahjong in hand, click to delete
     this.objMissingMjCal.MjInHand.forEach(el => {
-      btn_myMj.push(this.state.mjInHand[el]);
+      btn_myMj.push(this.renderMjButton(el, false));
     });
 
-    const mj_ans = this.renderAnswer();
-
-
-    const rdAns = this.renderAnswer();
     return (
       <div className="App">
         <header className="App-header">
