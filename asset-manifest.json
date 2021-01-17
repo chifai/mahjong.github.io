@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/missing_mahjong/static/css/main.988989d2.chunk.css",
-    "main.js": "/missing_mahjong/static/js/main.7f61b714.chunk.js",
-    "main.js.map": "/missing_mahjong/static/js/main.7f61b714.chunk.js.map",
+    "main.js": "/missing_mahjong/static/js/main.24d43c78.chunk.js",
+    "main.js.map": "/missing_mahjong/static/js/main.24d43c78.chunk.js.map",
     "runtime-main.js": "/missing_mahjong/static/js/runtime-main.e618e2c3.js",
     "runtime-main.js.map": "/missing_mahjong/static/js/runtime-main.e618e2c3.js.map",
     "static/js/2.75eeee43.chunk.js": "/missing_mahjong/static/js/2.75eeee43.chunk.js",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.e618e2c3.js",
     "static/js/2.75eeee43.chunk.js",
     "static/css/main.988989d2.chunk.css",
-    "static/js/main.7f61b714.chunk.js"
+    "static/js/main.24d43c78.chunk.js"
   ]
 }
