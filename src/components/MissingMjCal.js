@@ -1,3 +1,5 @@
+import MyMahjong from './MyMahjong';
+
 // to calculate the missing mahjong
 const MAX_MJ_TYPE = 9;
 const MAX_MJ_NUM = 4;
@@ -6,14 +8,14 @@ const MAX_MJ_CHOICE = 16;   // maximum 16 pieces
 class MissingMjCal {
     constructor() {
         this.MjInHandNum = Array(MAX_MJ_TYPE).fill(0);  // array to store each mj number (each one max: 4)
-        this.bNeedAPair = false;                        // true: need to include a pair
+        this.bNeedAPair = true;                        // true: need to include a pair
         this.MjInHand = [];                             // to store mj in hand in sorted order
         this.TotalMjNum = 0;
     }
 
-    // to set NeedAPair is true or not
-    setNeedAPair(bNeedAPair) {
-        this.bNeedAPair = bNeedAPair;
+    // to get NeedAPair
+    getNeedAPair() {
+        return this.bNeedAPair;
     }
 
     // calculate the missing mahjong
@@ -21,63 +23,136 @@ class MissingMjCal {
         // do not need to include a pair
         let MjGroup = [];
         if (this.bNeedAPair === false) {
+            console.log("Start cal with a pair");
             // return null as not valid when the number is not right
-            if (this.MjInHand.length % 3 !== 2) return [];
-            for (let i = 1; i < MAX_MJ_TYPE + 1; i++) {
-                let testMjList = this.MjInHand.slice();
-                testMjList.push(i);
-                testMjList.sort();
-                let ans = this.formGroups(testMjList);
-                if (ans !== null) {
-                    let possibleGroup = { num: i, group: ans };
-                    MjGroup.push(possibleGroup);
-                }
+            if (this.MjInHand.length % 3 === 2) {
+                MjGroup = this.tryMissingMj(this.MjInHand, 1).slice();
+                return [{numToDitch: -1, MjGroup: MjGroup}];
+            }
+            else if (this.MjInHand.length % 3 === 0) {
+                // try to ditch one of the mj
+                return this.tryDitchMj(this.MjInHand, 1);
             }
         }
         else {
+            console.log("Start cal with no pairs");
             // return null as not valid when the number is not right
-            if (this.MjInHand.length % 3 !== 1) return [];
-            for (let i = 1; i < MAX_MJ_TYPE + 1; i++) {
-
+            if (this.MjInHand.length % 3 === 1) {
+                MjGroup = this.tryMissingMj(this.MjInHand, 0).slice();
+                return [{numToDitch: -1, MjGroup: MjGroup}];
+            }
+            else if (this.MjInHand.length % 3 === 2) {
+                // try to ditch one of the mj
+                return this.tryDitchMj(this.MjInHand, 0);
             }
         }
-        //console.log(MjGroup);
+
+        return [];
+    }
+
+    tryDitchMj(SortedMj, nPairNum) {
+        // try current mj list
+        if (this.formMjGroups(SortedMj, nPairNum) !== null) {
+            console.log("win")
+            return [{numToDitch: 0, MjGroup: []}];     // already win!
+        }
+
+        let possibleNum = 1;
+        let possibleMjGroup = [];
+        let numToDitch = 0;
+        let ans = []
+        let lastDitchNum = 0;
+        for (let i = 0; i < SortedMj.length; i++) {
+            if (lastDitchNum === SortedMj[i]) {
+                continue;
+            }
+            let testMjList = SortedMj.slice();
+            testMjList.splice(i, 1);    // remove one mj
+            let tempPossibleMjGroup = this.tryMissingMj(testMjList, nPairNum);
+            if (tempPossibleMjGroup.length > possibleNum) {
+                possibleMjGroup = tempPossibleMjGroup.slice();
+                possibleNum = possibleMjGroup.length;
+                numToDitch = SortedMj[i];
+                ans = [];
+                ans.push({numToDitch: numToDitch, MjGroup: possibleMjGroup})
+                lastDitchNum = numToDitch;
+            }
+            else if (tempPossibleMjGroup.length === possibleNum) {
+                possibleMjGroup = tempPossibleMjGroup.slice();
+                possibleNum = possibleMjGroup.length;
+                numToDitch = SortedMj[i];
+                ans.push({numToDitch: numToDitch, MjGroup: possibleMjGroup})
+                lastDitchNum = numToDitch;
+            }
+        }
+
+        console.log(ans);
+
+        return ans;
+    }
+
+    tryMissingMj(SortedMj, nPairNum) {
+        let MjGroup = [];
+        for (let i = 1; i < MAX_MJ_TYPE + 1; i++) {
+            let testMjList = SortedMj.slice();
+            testMjList.push(i);
+            testMjList.sort();
+            let ans = this.formMjGroups(testMjList, nPairNum);
+            if (ans !== null) {
+                let possibleGroup = { num: i, group: ans };
+                MjGroup.push(possibleGroup);
+            }
+        }
         return MjGroup;
     }
 
-    // form groups from a sorted MjList, return list of formed groups
-    // return null if not exist
-    formGroups(MjList) {
-        let MjGroupList = [];
-        while (MjList.length > 0) {
-            // get the first one from the list and find a group
-            let targetMj = MjList.shift();
-            MjGroupList.push(targetMj);
-            //console.log({MjList:MjList});
+    // input sorted mj in hand, if valid groups are formed, return it
+    formMjGroups(SortedMj, nPairNum) {
+        // when bPair is true, one pair is needed
+        let pendingMj = [];
+        let validGroup = null;
+        pendingMj.push(new MyMahjong([], SortedMj, nPairNum));
 
-            // find the next two
-            for (let i = 0; i < 2; i++) {
-                // find next one
-                let nextIndex = MjList.findIndex(el => el === targetMj + 1);
-                targetMj++;
+        while (pendingMj.length > 0) {
+            // check ungrouped part if any mj can form a valid group: 
+            // valid: a pair/three-a-kind/continuous three
+            let popMJ = pendingMj.pop();
+            let tempMyMj;
 
-                //console.log({nextIndex: nextIndex});
-                //console.log({targetMj: targetMj});
+            // if ungrouped is empty => grouped is the answer
+            if (popMJ.isDone() === true) {
+                validGroup = popMJ.getGrouped();
+                break;
+            }
 
-                // not matched
-                if (nextIndex === -1) return null;
+            tempMyMj = new MyMahjong();
+            popMJ.copy(tempMyMj);
+            if (tempMyMj.groupPair() === 1) {
+                pendingMj.push(tempMyMj);
+            }
 
-                // found matched, push to group
-                MjGroupList.push(MjList.splice(nextIndex, 1)[0]);
-                //console.log({grouplist: MjGroupList});
+            tempMyMj = new MyMahjong();
+            popMJ.copy(tempMyMj);            
+            if (tempMyMj.groupContThree() === true) {
+                pendingMj.push(tempMyMj);
+            }
+
+            tempMyMj = new MyMahjong();
+            popMJ.copy(tempMyMj);
+            if (tempMyMj.groupThreeAKind() === true) {
+                pendingMj.push(tempMyMj);
             }
         }
-        //console.log({Grouplist: MjGroupList});
-        return MjGroupList;
+        return validGroup;
     }
 
     // add or minus one from current mj in hand
     changeMjNum(MjNum, bAdd) {
+        if (MjNum === 0) {
+            this.bNeedAPair = !bAdd;
+            return true;
+        }
+
         // mj num can only be 1 - 9
         let MjIndex = MjNum - 1;
 
