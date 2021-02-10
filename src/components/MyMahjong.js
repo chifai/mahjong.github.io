@@ -43,6 +43,8 @@ class MyMahjong {
 
     groupContThree() {
         let target = this.ungrouped[0];
+        if (target === 0) return false; // if mh num is 0, cannot be grouped as cont. three
+
         let matchedInd1 = this.ungrouped.findIndex(el => el === target + 1);
         let matchedInd2 = this.ungrouped.findIndex(el => el === target + 2);
 

@@ -8,15 +8,12 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.objMissingMjCal = new MissingMjCal();
-    //this.possibleGroup = [];
-    //this.numToDitch = 0;
     this.ans = [];
   }
 
   clickToAdd(i) {
     if (this.objMissingMjCal.changeMjNum(i, true) === true) {
       let temp = this.objMissingMjCal.calMissingMahjong();
-      console.log({ temp: temp });
       this.ans = temp.slice();
       this.forceUpdate();
     }
@@ -24,7 +21,8 @@ class App extends React.Component {
 
   clickToDelete(i) {
     if (this.objMissingMjCal.changeMjNum(i, false) === true) {
-      this.ans = this.objMissingMjCal.calMissingMahjong().slice();
+      let temp = this.objMissingMjCal.calMissingMahjong();
+      this.ans = temp.slice();
       this.forceUpdate();
     }
   }
@@ -67,11 +65,17 @@ class App extends React.Component {
       el.group.forEach(mjGroup => {
         mjGroup.forEach(MjNum => {
           if (MjNum === el.num && bRed === false) {
-            mj_ans.push(<button className="button_red">{MjNum}</button>);
+            if (MjNum === 0)
+              mj_ans.push(<button className="button_red">{'發'}</button>);
+            else
+              mj_ans.push(<button className="button_red">{MjNum}</button>);
             bRed = true;
           }
           else {
-            mj_ans.push(<button className="button">{MjNum}</button>);
+            if (MjNum === 0)
+              mj_ans.push(<button className="button">{'發'}</button>);
+            else
+              mj_ans.push(<button className="button">{MjNum}</button>);
           }
         })
       })
@@ -87,7 +91,6 @@ class App extends React.Component {
     let rdAns = []
 
     this.ans.forEach(el => {
-      console.log({ el: el });
       if (el.numToDitch === 0) {
         rdAns.push(<h3>已糊牌</h3>);
       }
@@ -121,10 +124,6 @@ class App extends React.Component {
     }
 
     // create mahjong in hand, click to delete
-    if (this.objMissingMjCal.getNeedAPair() === false) {
-      btn_myMj.push(this.renderMjButton(0, false));
-      btn_myMj.push(this.renderMjButton(0, false));
-    }
     this.objMissingMjCal.MjInHand.forEach(el => {
       btn_myMj.push(this.renderMjButton(el, false));
     });

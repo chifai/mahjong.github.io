@@ -8,43 +8,22 @@ const MAX_MJ_CHOICE = 16;   // maximum 16 pieces
 class MissingMjCal {
     constructor() {
         this.MjInHandNum = Array(MAX_MJ_TYPE).fill(0);  // array to store each mj number (each one max: 4)
-        this.bNeedAPair = true;                        // true: need to include a pair
         this.MjInHand = [];                             // to store mj in hand in sorted order
         this.TotalMjNum = 0;
-    }
-
-    // to get NeedAPair
-    getNeedAPair() {
-        return this.bNeedAPair;
     }
 
     // calculate the missing mahjong
     calMissingMahjong() {
         // do not need to include a pair
         let MjGroup = [];
-        if (this.bNeedAPair === false) {
-            console.log("Start cal with a pair");
-            // return null as not valid when the number is not right
-            if (this.MjInHand.length % 3 === 2) {
-                MjGroup = this.tryMissingMj(this.MjInHand, 1).slice();
-                return [{numToDitch: -1, MjGroup: MjGroup}];
-            }
-            else if (this.MjInHand.length % 3 === 0) {
-                // try to ditch one of the mj
-                return this.tryDitchMj(this.MjInHand, 1);
-            }
+        // return null as not valid when the number is not right
+        if (this.MjInHand.length % 3 === 1) {
+            MjGroup = this.tryMissingMj(this.MjInHand, 0).slice();
+            return [{numToDitch: -1, MjGroup: MjGroup}];
         }
-        else {
-            console.log("Start cal with no pairs");
-            // return null as not valid when the number is not right
-            if (this.MjInHand.length % 3 === 1) {
-                MjGroup = this.tryMissingMj(this.MjInHand, 0).slice();
-                return [{numToDitch: -1, MjGroup: MjGroup}];
-            }
-            else if (this.MjInHand.length % 3 === 2) {
-                // try to ditch one of the mj
-                return this.tryDitchMj(this.MjInHand, 0);
-            }
+        else if (this.MjInHand.length % 3 === 2) {
+            // try to ditch one of the mj
+            return this.tryDitchMj(this.MjInHand, 0);
         }
 
         return [];
@@ -53,7 +32,6 @@ class MissingMjCal {
     tryDitchMj(SortedMj, nPairNum) {
         // try current mj list
         if (this.formMjGroups(SortedMj, nPairNum) !== null) {
-            console.log("win")
             return [{numToDitch: 0, MjGroup: []}];     // already win!
         }
 
@@ -86,14 +64,16 @@ class MissingMjCal {
             }
         }
 
-        console.log(ans);
-
         return ans;
     }
 
     tryMissingMj(SortedMj, nPairNum) {
         let MjGroup = [];
-        for (let i = 1; i < MAX_MJ_TYPE + 1; i++) {
+        nPairNum = 0;
+        for (let i = 0; i < MAX_MJ_TYPE + 1; i++) {
+            if (i > 0 && this.MjInHandNum[i - 1] === MAX_MJ_NUM) {
+                continue;
+            }
             let testMjList = SortedMj.slice();
             testMjList.push(i);
             testMjList.sort();
@@ -103,6 +83,7 @@ class MissingMjCal {
                 MjGroup.push(possibleGroup);
             }
         }
+
         return MjGroup;
     }
 
@@ -150,6 +131,21 @@ class MissingMjCal {
     changeMjNum(MjNum, bAdd) {
         if (MjNum === 0) {
             this.bNeedAPair = !bAdd;
+            if (bAdd === true) {
+                if (this.MjInHand[0] === 0) {
+                    return false;
+                }
+                this.MjInHand.push(0);
+                this.MjInHand.push(0);
+                this.TotalMjNum += 2;      // add 2
+            }
+            else {
+                if (this.MjInHand[0] === 0) {
+                    this.MjInHand.splice(0, 2);
+                    this.TotalMjNum -= 2;
+                }
+            }
+            this.MjInHand.sort();
             return true;
         }
 
