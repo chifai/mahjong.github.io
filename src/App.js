@@ -78,6 +78,7 @@ class App extends React.Component {
               mj_ans.push(<button className="button">{MjNum}</button>);
           }
         })
+        mj_ans.push(<rect className="rect">{' '}</rect>);
       })
       rdAns.push(<div>{mj_ans}</div>);
       rdAns.push(<br></br>);

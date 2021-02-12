@@ -5,9 +5,9 @@ export const web_logo = <img src={logo} className="App-logo" alt="logo" />;
 
 export const intro_link = <a
   className="App-link"
-  href="https://github.com/chifai"
+  href="https://github.com/chifai/missing_mahjong"
   target="_blank"
   rel="noopener noreferrer"
 >
-  click here
+  click here for github repository
                   </a>;

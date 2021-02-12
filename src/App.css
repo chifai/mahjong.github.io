@@ -47,7 +47,9 @@
 }
 
 .App-link {
-  color: #61dafb;
+  font-family: "Copperplate", fantasy;
+  font-size: 15px;
+  color: #1ae6db;
 }
 
 .button {
@@ -79,6 +81,21 @@
   padding: 0;
   text-align: center;
   width: 34px;
+}
+
+.rect {
+  opacity: 0.0;
+  background: #fff;
+  float: left;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 34px;
+  height: 45px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  width: 10px;
 }
 
 @keyframes App-logo-spin {
